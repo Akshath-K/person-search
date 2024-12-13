@@ -1,18 +1,13 @@
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { Phone, Mail, MapPin } from 'lucide-react'
-
-interface User {
-  id: string
-  name: string
-  phoneNumber: string
-  email?: string
-  location?: string
-}
+// app/components/user-card.tsx
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Phone, Mail } from 'lucide-react';
+import { UserDialog } from './user-dialog';
+import { User } from '@/app/actions/schemas';
 
 interface UserCardProps {
-  user: User
+  user: User;
 }
 
 export function UserCard({ user }: UserCardProps) {
@@ -39,13 +34,10 @@ export function UserCard({ user }: UserCardProps) {
             <span>{user.email}</span>
           </div>
         )}
-        {user.location && (
-          <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-muted-foreground" />
-            <span>{user.location}</span>
-          </div>
-        )}
       </CardContent>
+      <CardFooter>
+        <UserDialog user={user} />
+      </CardFooter>
     </Card>
-  )
+  );
 }
