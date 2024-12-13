@@ -2,9 +2,10 @@
 
 import { useState } from 'react'
 import AsyncSelect from 'react-select/async'
-import { searchUsers } from '@/app/actions/actions'
+import { deleteUser, searchUsers } from '@/app/actions/actions'
 import { UserCard } from './user-card'
 import { User } from '@/app/actions/schemas'
+import { toast } from 'sonner'
 
 // Option type remains the same
 interface Option {
@@ -25,6 +26,16 @@ export default function UserSearch() {
     setSelectedUser(option ? option.user : null)
   }
 
+  const handleDelete = async (id: string) => {
+    const result = await deleteUser(id)
+    if (result.success) {
+      setSelectedUser(null) // Clear selected user after deletion
+      toast.success(result.message)
+    } else {
+      toast.error(result.message)
+    }
+  }
+
   return (
     <div className="space-y-6">
       <AsyncSelect
@@ -34,7 +45,7 @@ export default function UserSearch() {
         placeholder="Search for a user..."
         className="w-full max-w-md mx-auto"
       />
-      {selectedUser && <UserCard user={selectedUser} />}
+      {selectedUser && <UserCard user={selectedUser} onDelete={handleDelete} />}
     </div>
   )
 }

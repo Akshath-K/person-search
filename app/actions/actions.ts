@@ -1,6 +1,7 @@
 // app/actions.ts
 'use server';
 
+import { ActionState } from '@/components/mutable-dialog';
 import { User, userSchema } from './schemas';
  
 const users: User[] = [
@@ -41,3 +42,23 @@ export async function editUser(id: string, data: Omit<User, 'id'>): Promise<User
   users[userIndex] = validatedUser;
   return validatedUser;
 }
+
+export async function deleteUser(id: string): Promise<ActionState<null>> {
+  const userIndex = users.findIndex((user) => user.id === id);
+
+  if (userIndex === -1) {
+    return {
+      success: false,
+      message: `User with ID ${id} not found.`,
+    };
+  }
+
+  users.splice(userIndex, 1); // Remove user from the array
+
+  return {
+    success: true,
+    message: `User with ID ${id} deleted successfully.`,
+    data: null,
+  };
+}
+

@@ -2,15 +2,23 @@
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { Button } from "@/components/ui/button";
 import { Phone, Mail } from 'lucide-react';
 import { UserDialog } from './user-dialog';
 import { User } from '@/app/actions/schemas';
 
 interface UserCardProps {
   user: User;
+  onDelete?: (id: string) => void; // Optional delete handler
 }
 
-export function UserCard({ user }: UserCardProps) {
+export function UserCard({ user, onDelete }: UserCardProps) {
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(user.id); // Call delete function passed via props
+    }
+  };
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="flex flex-row items-center gap-4">
@@ -34,9 +42,12 @@ export function UserCard({ user }: UserCardProps) {
             <span>{user.email}</span>
           </div>
         )}
-      </CardContent>
-      <CardFooter>
+       </CardContent>
+      <CardFooter className="flex justify-between items-center">
         <UserDialog user={user} />
+        <Button variant="destructive" onClick={handleDelete}>
+          Delete
+        </Button>
       </CardFooter>
     </Card>
   );
